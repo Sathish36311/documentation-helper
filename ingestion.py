@@ -28,7 +28,7 @@ os.environ['REQUEST_CA_BUNDLE'] = certifi.where()
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small", show_progress_bar=True, chunk_size=50, retry_min_seconds=10)
 
 vectorstore = PineconeVectorStore(index_name='langchain-docs-2026', embedding=embeddings)
-# chroma = Chroma(persist_directory='chroma_db', embedding_function=embeddings)
+#vectorstore = Chroma(persist_directory='chroma_db', embedding_function=embeddings)
 
 tavily_map = TavilyMap(max_depth=5, max_breadth=20, max_pages =1000)
 tavily_crawl = TavilyCrawl()
@@ -120,6 +120,7 @@ async def main():
     log_header("DOCUMENT INDEXING PHASE")
     log_info(f"Pinecone: Indexing {len(splitted_docs)} documents into Pinecone", Colors.GREEN)
 
+    # If needed you can make it as batch index
     await vectorstore.aadd_documents(splitted_docs)
 
     log_success(f"Pinecone: Successfully indexed {len(splitted_docs)} documnts")
