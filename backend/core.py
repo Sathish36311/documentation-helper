@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import Dict,Any,List
 from dotenv import load_dotenv
 from langchain.agents import create_agent
@@ -8,8 +9,11 @@ from langchain.tools import tool
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env", override=True)
 
+if not os.getenv("OPENAI_API_KEY"):
+    raise RuntimeError("OPENAI_API_KEY is not set. Add it to the workspace .env file or your shell before running the app.")
 
 # Initialize Embeddings
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")

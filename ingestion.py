@@ -1,6 +1,7 @@
 import asyncio
 import os
 import ssl
+from pathlib import Path
 from typing import Dict,List, Any
 
 
@@ -17,8 +18,11 @@ from dotenv import load_dotenv
 from logger import (Colors, log_error, log_header, log_info,log_success,log_warning)
 
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env", override=True)
 
+if not os.getenv("OPENAI_API_KEY"):
+    raise RuntimeError("OPENAI_API_KEY is not set. Add it to the workspace .env file or your shell before running the ingestion script.")
 
 # Configure SSL context to use certifi certificates
 ssl_context = ssl.create_default_context(cafile=certifi.where())
